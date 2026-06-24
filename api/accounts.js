@@ -9,16 +9,9 @@
 
 const REDIS_KEY = "roblox-monitor:shared-ids";
 
-// Resolusi env var: coba konvensi Vercel KV dulu, fallback ke Upstash native
-const REDIS_URL =
-  process.env.KV_REST_API_URL ||
-  process.env.UPSTASH_REDIS_REST_URL;
-
-const REDIS_TOKEN =
-  process.env.KV_REST_API_TOKEN ||
-  process.env.UPSTASH_REDIS_REST_TOKEN;
-
 async function redisGet(key) {
+  const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   const url = `${REDIS_URL}/get/${encodeURIComponent(key)}`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
@@ -29,6 +22,8 @@ async function redisGet(key) {
 }
 
 async function redisSet(key, value) {
+  const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   const url = `${REDIS_URL}/set/${encodeURIComponent(key)}`;
   const res = await fetch(url, {
     method: "POST",
@@ -42,7 +37,8 @@ async function redisSet(key, value) {
   return res.json();
 }
 
-export default async function handler(req, res) {
+// CommonJS export — kompatibel dengan Vercel Node.js runtime tanpa "type":"module"
+module.exports = async function handler(req, res) {
   // Izinkan dipanggil dari domain manapun (app ini publik/dipakai bersama tanpa auth)
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -51,6 +47,9 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
+
+  const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!REDIS_URL || !REDIS_TOKEN) {
     return res.status(500).json({
@@ -79,4 +78,4 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(500).json({ error: err.message || "Internal error" });
   }
-      }
+};
