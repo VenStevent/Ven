@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Analytics } from '@vercel/analytics/react';
 
 const BACKEND_URL = "https://roblox-vercel-lake.vercel.app/api";
 const STORAGE_KEY = "roblox-monitor-ids"; // cache lokal (fallback offline / loading awal)
@@ -1039,6 +1040,7 @@ export default function App() {
           </div>
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
