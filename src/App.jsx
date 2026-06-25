@@ -8,7 +8,7 @@ const API_ACCOUNTS = "/api/accounts"; // daftar User ID bersama (semua device/br
 // Nomor versi build ini. Naikkan setiap kali deploy versi baru (juga update public/version.json
 // dengan nilai yang sama). Tab yang masih membuka versi lama akan otomatis reload begitu
 // versi di server berbeda dari versi ini.
-const APP_VERSION = "29";
+const APP_VERSION = "30";
 
 const PRESENCE_LABELS = {
   0: { text: "Offline",    color: "#6b7280", bg: "#111827" },
